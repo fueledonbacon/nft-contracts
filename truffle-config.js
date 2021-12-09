@@ -19,10 +19,10 @@ module.exports = {
     },
     testnet: {
       provider: () => new HDWalletProvider(config.privateKey, config.avaxtestRPC),
-      network_id: config.avaxtestId,
+      network_id: "*",
       confirmations: 1,
-      gas: 20000000,
-      gasPrice: 10000000000,
+      // gas: 20000000,
+      // gasPrice: 10000000000,
       timeoutBlocks: 200,
       skipDryRun: true
     },

@@ -2,10 +2,8 @@
 // SnowToken v0.1
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
-import "@openzeppelin/contracts/token/ERC20/extensions/draft-ERC20Permit.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
@@ -35,14 +33,14 @@ contract SnowToken is
         _cap = 250000000 ether;
         _tokenomics = [
             100000000 ether, // mint to lock wallet
-            50000000 ether, // mint to treasury wallet
+            50000000 ether, // mint to treasury multisig wallet
             20000000 ether, // mint for initial liquidity
             30000000 ether, // mint for LP farm
             50000000 ether // mint for PolyientX vault
         ];
         _mintWallets = [
             address(0x1), // lock wallet
-            address(0x2), // treasury wallet
+            address(0x2), // treasury multisig wallet
             address(0x3), // liquidity manager wallet
             address(0x4), // LP farm manager wallet
             address(0x5) // PolyientX vault manager wallet
@@ -78,14 +76,6 @@ contract SnowToken is
         for (uint256 i = 0; i < _tokenomics.length; i++) {
             _mint(_mintWallets[i], _tokenomics[i]);
         }
-    }
-
-    function mint(address to, uint256 amount) public onlyOwner {
-        require(
-            totalSupply().add(amount) <= _cap,
-            "$sno::mint: cannot exceed max supply"
-        );
-        _mint(to, amount);
     }
 
     function _beforeTokenTransfer(
