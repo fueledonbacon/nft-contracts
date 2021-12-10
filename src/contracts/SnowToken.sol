@@ -26,53 +26,53 @@ contract SnowToken is
 
     address[] public _mintWallets;
 
-    constructor(string memory name, string memory symbol)
-        ERC20(name, symbol)
-        ERC20Permit(name)
-    {
-        _cap = 250000000 ether;
-        _tokenomics = [
-            100000000 ether, // mint to lock wallet
-            50000000 ether, // mint to treasury multisig wallet
-            20000000 ether, // mint for initial liquidity
-            30000000 ether, // mint for LP farm
-            50000000 ether // mint for PolyientX vault
-        ];
-        _mintWallets = [
-            address(0x1), // lock wallet
-            address(0x2), // treasury multisig wallet
-            address(0x3), // liquidity manager wallet
-            address(0x4), // LP farm manager wallet
-            address(0x5) // PolyientX vault manager wallet
-        ];
+    constructor(
+        string memory name,
+        string memory symbol,
+        uint256 cap_,
+        uint256[] memory tokenomics_,
+        address[] memory mintWallets_
+    ) ERC20(name, symbol) ERC20Permit(name) {
+        _cap = cap_;
+        _updateTokenomics(mintWallets_, tokenomics_);
     }
 
-    function updateTokenomics(
+    function _updateTokenomics(
         address[] memory mintWallets_,
-        uint256[] memory tokenmics_
-    ) public onlyOwner {
+        uint256[] memory tokenomics_
+    ) private {
         delete _mintWallets;
         delete _tokenomics;
-        require(mintWallets_.length == tokenmics_.length, "Mismatch data size");
+        require(
+            mintWallets_.length == tokenomics_.length,
+            "SnowToken: mismatch tokenomics size"
+        );
         uint256 totalCap_ = 0;
         for (uint256 i = 0; i < mintWallets_.length; i++) {
             if (mintWallets_[i] == address(0x0)) continue;
             _mintWallets.push(mintWallets_[i]);
-            _tokenomics.push(tokenmics_[i]);
-            totalCap_ = totalCap_.add(tokenmics_[i]);
+            _tokenomics.push(tokenomics_[i]);
+            totalCap_ = totalCap_.add(tokenomics_[i]);
         }
-        require(totalCap_ == _cap, "Mismatch total supply");
+        require(totalCap_ == _cap, "SnowToken: mismatch total supply");
     }
 
-    function pause() public onlyOwner {
+    function updateTokenomics(
+        address[] memory mintWallets_,
+        uint256[] memory tokenomics_
+    ) external onlyOwner {
+        _updateTokenomics(mintWallets_, tokenomics_);
+    }
+
+    function pause() external onlyOwner {
         _pause();
     }
 
-    function unpause() public onlyOwner {
+    function unpause() external onlyOwner {
         _unpause();
     }
 
-    function mintAll() public onlyOwner {
+    function mintAll() external onlyOwner {
         for (uint256 i = 0; i < _tokenomics.length; i++) {
             _mint(_mintWallets[i], _tokenomics[i]);
         }
@@ -106,5 +106,19 @@ contract SnowToken is
         override(ERC20, ERC20Votes)
     {
         super._burn(account, amount);
+    }
+
+    function emergencyWithdrawToken(address token_, address to_)
+        external
+        onlyOwner
+    {
+        IERC20(token_).safeTransfer(
+            to_,
+            IERC20(token_).balanceOf(address(this))
+        );
+    }
+
+    function emergencyWithdrawCurrency(address to_) external onlyOwner {
+        payable(to_).transfer(address(this).balance);
     }
 }

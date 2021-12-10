@@ -48,8 +48,8 @@ contract MultiSigWallet is Ownable {
     }
 
     function Sign() public {
-        require(_isSigner[msg.sender], "Not Signer");
-        require(!_signed[msg.sender], "Already signed user");
+        require(_isSigner[msg.sender], "MultiSigWallet: not signer");
+        require(!_signed[msg.sender], "MultiSigWallet: already signed user");
         _signed[msg.sender] = true;
     }
 
@@ -58,7 +58,7 @@ contract MultiSigWallet is Ownable {
         address to_,
         uint256 amount_
     ) public onlyOwner {
-        require(isSignApproved(), "Not Signed All");
+        require(isSignApproved(), "MultiSigWallet: not signed all");
         IERC20(token_).safeTransfer(to_, amount_);
     }
 
@@ -66,7 +66,7 @@ contract MultiSigWallet is Ownable {
         public
         onlyOwner
     {
-        require(isSignApproved(), "Not Signed All");
+        require(isSignApproved(), "MultiSigWallet: not signed all");
         to_.transfer(amount_);
     }
 }
