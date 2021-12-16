@@ -29,12 +29,9 @@ contract SnowToken is
     constructor(
         string memory name,
         string memory symbol,
-        uint256 cap_,
-        uint256[] memory tokenomics_,
-        address[] memory mintWallets_
+        uint256 cap_
     ) ERC20(name, symbol) ERC20Permit(name) {
         _cap = cap_;
-        _updateTokenomics(mintWallets_, tokenomics_);
     }
 
     function _updateTokenomics(
@@ -73,6 +70,7 @@ contract SnowToken is
     }
 
     function mintAll() external onlyOwner {
+        require(_tokenomics.length > 0, "SnowToken: tokenomics not configured");
         for (uint256 i = 0; i < _tokenomics.length; i++) {
             _mint(_mintWallets[i], _tokenomics[i]);
         }
@@ -98,6 +96,10 @@ contract SnowToken is
         internal
         override(ERC20, ERC20Votes)
     {
+        require(
+            totalSupply().add(amount) <= _cap,
+            "SnowToken: already minted all"
+        );
         super._mint(to, amount);
     }
 
