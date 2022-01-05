@@ -5,8 +5,8 @@
   "main": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "flatten-token": "truffle-flattener ./src/contracts/snowToken.sol --output snowToken.sol",
-    "flatten-nft": "truffle-flattener ./src/contracts/savageSnowmen.sol --output savageSnowmen.sol"
+    "flatten-token": "npx hardhat flatten ./src/contracts/SnowToken.sol > snowToken.sol",
+    "flatten-nft": "npx hardhat flatten ./src/contracts/SavageSnowmen.sol > savageSnowmen.sol"
   },
   "keywords": [],
   "author": "Astonish",
@@ -15,11 +15,6 @@
     "@1inch/multicall": "^1.0.3",
     "@ethereumjs/common": "^2.4.0",
     "@ethereumjs/tx": "^3.3.0",
-    "@nomiclabs/buidler": "^1.4.8",
-    "@nomiclabs/buidler-ethers": "^2.0.2",
-    "@nomiclabs/buidler-waffle": "^2.1.0",
-    "@nomiclabs/buidler-web3": "^1.3.4",
-    "@openzeppelin/buidler-upgrades": "^1.2.1",
     "@openzeppelin/cli": "^2.8.2",
     "@openzeppelin/contracts": "^4.0.0",
     "@truffle/hdwallet-provider": "^1.4.0",
@@ -36,7 +31,6 @@
     "ethereumjs-util": "^7.0.4",
     "ethers": "^5.4.2",
     "fs": "^0.0.1-security",
-    "global": "^4.4.0",
     "mysql": "^2.18.1",
     "path": "^0.12.7",
     "truffle": "^5.4.23",
