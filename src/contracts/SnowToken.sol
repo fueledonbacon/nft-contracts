@@ -2,14 +2,14 @@
 // SnowToken v0.1
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
-import "@openzeppelin/contracts/token/ERC20/extensions/draft-ERC20Permit.sol";
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
-import "@openzeppelin/contracts/security/Pausable.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
+import '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
+import '@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol';
+import '@openzeppelin/contracts/token/ERC20/extensions/draft-ERC20Permit.sol';
+import '@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol';
+import '@openzeppelin/contracts/utils/math/SafeMath.sol';
+import '@openzeppelin/contracts/security/Pausable.sol';
+import '@openzeppelin/contracts/access/Ownable.sol';
 
 contract SnowToken is
     ERC20,
@@ -55,7 +55,7 @@ contract SnowToken is
     ) public onlyOwner {
         delete _mintWallets;
         delete _tokenomics;
-        require(mintWallets_.length == tokenmics_.length, "Mismatch data size");
+        require(mintWallets_.length == tokenmics_.length, 'Mismatch data size');
         uint256 totalCap_ = 0;
         for (uint256 i = 0; i < mintWallets_.length; i++) {
             if (mintWallets_[i] == address(0x0)) continue;
@@ -63,7 +63,7 @@ contract SnowToken is
             _tokenomics.push(tokenmics_[i]);
             totalCap_ = totalCap_.add(tokenmics_[i]);
         }
-        require(totalCap_ == _cap, "Mismatch total supply");
+        require(totalCap_ == _cap, 'Mismatch total supply');
     }
 
     function pause() public onlyOwner {
@@ -83,7 +83,7 @@ contract SnowToken is
     function mint(address to, uint256 amount) public onlyOwner {
         require(
             totalSupply().add(amount) <= _cap,
-            "$sno::mint: cannot exceed max supply"
+            '$sno::mint: cannot exceed max supply'
         );
         _mint(to, amount);
     }

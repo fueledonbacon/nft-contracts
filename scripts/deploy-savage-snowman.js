@@ -7,9 +7,10 @@ async function main() {
     console.log("Deploying contracts with the account:", deployer.address);
     console.log("Account balance:", (await deployer.getBalance()).toString());
 
-    const ProceedsPayments = await ethers.getContractFactory("ProceedsPayments")
-    const RoyaltyPayments = await ethers.getContractFactory("RoyaltyPayments")
-    const SavageSnowman = await ethers.getContractFactory("SavageSnowmen")
+    const ProceedsPayments = await ethers.getContractFactory("ProceedsPayments");
+    const RoyaltyPayments = await ethers.getContractFactory("RoyaltyPayments");
+    const SavageSnowman = await ethers.getContractFactory("SavageSnowmen");
+    const SnowToken = await ethers.getContractFactory("SnowToken");
 
     const proceedsPaymentsContract = await ProceedsPayments.deploy(
         // [
@@ -82,6 +83,10 @@ async function main() {
     // updateEnv(envUpdate)
 
     console.log("Savage Snowmen deployed to address:", savageSnowmenContract.address)
+
+    const snowTokenContract = await SnowToken.deploy('TokenName', 'TN');
+
+    console.log("Snow Token deployed to address:", snowTokenContract.address)
 }
 
   main()
