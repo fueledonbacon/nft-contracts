@@ -45,7 +45,7 @@ contract SnowToken is
     function mint(address to, uint256 amount) public onlyOwner {
         require(
             totalSupply().add(amount) <= cap,
-            '$sno::mint: cannot exceed max supply'
+            '$lodge::mint: cannot exceed max supply'
         );
         _mint(to, amount);
     }
