@@ -28,7 +28,7 @@ module.exports = {
   solidity: "0.8.0",
   defaultNetwork: "localhost",
   paths: {
-      sources: "src/contracts"
+      sources: "contracts/"
   },
   networks: {
     local: {
