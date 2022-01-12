@@ -3,6 +3,10 @@
  */
  require("@nomiclabs/hardhat-waffle");
 
+const dot = require('dotenv');
+
+dot.config();
+
  task("accounts", "Prints the list of accounts", async (args, hre) => {
   const accounts = await hre.ethers.getSigners()
   accounts.forEach((account)=> {
@@ -18,8 +22,8 @@ task("balances", "Prints the list of AVAX account balances", async (args, hre) =
     );
     console.log(`${account.address} has balance ${balance.toString()}`);
   }
-})
- 
+});
+
 module.exports = {
   solidity: "0.8.0",
   defaultNetwork: "localhost",
@@ -54,7 +58,7 @@ module.exports = {
         url: 'https://api.avax.network/ext/bc/C/rpc',
         gasPrice: 225000000000,
         chainId: 43114,
-        accounts: []
+        accounts: [`${process.env.PRIVATE_KEY}`]
       }
   },
   mocha: {
