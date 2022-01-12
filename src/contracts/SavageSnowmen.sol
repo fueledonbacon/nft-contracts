@@ -2,15 +2,15 @@
 // SavageSnowmen v0.1
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/interfaces/IERC2981.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
-import "@openzeppelin/contracts/security/Pausable.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import '@openzeppelin/contracts/token/ERC721/ERC721.sol';
+import '@openzeppelin/contracts/interfaces/IERC2981.sol';
+import '@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol';
+import '@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol';
+import '@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol';
+import '@openzeppelin/contracts/security/Pausable.sol';
+import '@openzeppelin/contracts/access/Ownable.sol';
+import '@openzeppelin/contracts/utils/Counters.sol';
+import '@openzeppelin/contracts/utils/math/SafeMath.sol';
 
 contract SavageSnowmen is
     ERC721,
@@ -41,8 +41,7 @@ contract SavageSnowmen is
         uint256 cap_,
         address proceedsPaymentsAddress,
         address royaltiesPaymentAddress
-    ) ERC721(name, symbol)
-    {
+    ) ERC721(name, symbol) {
         cap = cap_;
         _tokenBaseURI = tokenBaseURI;
         _proceedsPaymentsAddress = payable(proceedsPaymentsAddress);
@@ -65,7 +64,9 @@ contract SavageSnowmen is
         override(ERC721, IERC165, ERC721Enumerable)
         returns (bool)
     {
-        return interfaceId == _INTERFACE_ID_ERC2981 || super.supportsInterface(interfaceId);
+        return
+            interfaceId == _INTERFACE_ID_ERC2981 ||
+            super.supportsInterface(interfaceId);
     }
 
     function setBaseURI(string memory uri) external onlyOwner {
@@ -83,13 +84,16 @@ contract SavageSnowmen is
     function mint(uint256 amount) external payable whenNotPaused {
         require(
             msg.value >= PRICE.mul(amount),
-            "SavageSnowmen: invalid amount sent"
+            'SavageSnowmen: invalid amount sent'
         );
         require(
             _tokenIdCounter.current().add(amount) <= cap,
-            "SavageSnowmen: supply too low to mint amount"
+            'SavageSnowmen: supply too low to mint amount'
         );
-        require(amount > 0, "Number of requested tokens has to be greater than 0");
+        require(
+            amount > 0,
+            'Number of requested tokens has to be greater than 0'
+        );
 
         for (uint256 x = 0; x < amount; x++) {
             _tokenIdCounter.increment();
@@ -102,7 +106,7 @@ contract SavageSnowmen is
     }
 
     function withdraw() external onlyOwner {
-        require(address(this).balance > 0, "No balance");
+        require(address(this).balance > 0, 'No balance');
 
         _proceedsPaymentsAddress.transfer(address(this).balance);
     }
@@ -141,7 +145,10 @@ contract SavageSnowmen is
         override(ERC721, ERC721URIStorage)
         returns (string memory)
     {
-        return string(abi.encodePacked(ERC721URIStorage.tokenURI(tokenId), ".json"));
+        return
+            string(
+                abi.encodePacked(ERC721URIStorage.tokenURI(tokenId), '.json')
+            );
     }
 
     function royaltyInfo(uint256 tokenId, uint256 salePrice)
@@ -150,7 +157,7 @@ contract SavageSnowmen is
         override
         returns (address receiver, uint256 royaltyAmount)
     {
-        uint bp = 550; // 5.5% royalties in basis points
+        uint256 bp = 550; // 5.5% royalties in basis points
         return (_royaltiesPaymentsAddress, salePrice.mul(bp).div(10000));
     }
 }

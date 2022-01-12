@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "flatten-token": "truffle-flattener ./src/contracts/snowToken.sol --output snowToken.sol",
-    "flatten-nft": "truffle-flattener ./src/contracts/savageSnowmen.sol --output savageSnowmen.sol"
+    "flatten-nft": "truffle-flattener ./src/contracts/savageSnowmen.sol --output savageSnowmen.sol",
+    "accounts": "npx hardhat accounts",
+    "balances": "npx hardhat balances"
   },
   "keywords": [],
   "author": "Astonish",
@@ -47,6 +49,8 @@
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.3",
     "@nomiclabs/hardhat-waffle": "^2.0.1",
-    "hardhat": "^2.7.1"
+    "hardhat": "^2.7.1",
+    "prettier": "^2.5.1",
+    "prettier-plugin-solidity": "^1.0.0-beta.19"
   }
 }
